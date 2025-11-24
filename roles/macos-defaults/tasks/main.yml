@@ -1,0 +1,98 @@
+---
+- name: Set Finder to always show list view
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: FXPreferredViewStyle
+    type: string
+    value: "Nlsv"
+    state: present
+
+- name: Show hidden files in Finder
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: AppleShowAllFiles
+    type: bool
+    value: true
+    state: present
+
+- name: Show path bar in Finder
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: ShowPathbar
+    type: bool
+    value: true
+    state: present
+
+- name: Show all filename extensions
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: AppleShowAllExtensions
+    type: bool
+    value: true
+    state: present
+
+- name: Enable Dock auto-hide
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: autohide
+    type: bool
+    value: true
+    state: present
+
+- name: Set Dock icon size
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: tilesize
+    type: int
+    value: 48
+    state: present
+
+- name: Set key repeat rate (fastest)
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: KeyRepeat
+    type: int
+    value: 2
+    state: present
+
+- name: Set initial key repeat delay
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: InitialKeyRepeat
+    type: int
+    value: 15
+    state: present
+
+- name: Enable tap to click
+  community.general.osx_defaults:
+    domain: com.apple.AppleMultitouchTrackpad
+    key: Clicking
+    type: bool
+    value: true
+    state: present
+
+- name: Set tracking speed
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: com.apple.trackpad.scaling
+    type: float
+    value: 1.5
+    state: present
+
+- name: Change screenshot save location to Downloads
+  community.general.osx_defaults:
+    domain: com.apple.screencapture
+    key: location
+    type: string
+    value: "{{ ansible_env.HOME }}/Downloads"
+    state: present
+
+- name: Restart Finder to apply changes
+  ansible.builtin.command: killall Finder
+  changed_when: true
+  failed_when: false
+
+- name: Restart Dock to apply changes
+  ansible.builtin.command: killall Dock
+  changed_when: true
+  failed_when: false

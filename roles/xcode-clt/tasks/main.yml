@@ -1,0 +1,14 @@
+---
+- name: Check if Xcode Command Line Tools are installed
+  ansible.builtin.stat:
+    path: /Library/Developer/CommandLineTools/usr/bin/git
+  register: xcode_clt
+
+- name: Display Xcode CLT status
+  ansible.builtin.debug:
+    msg: "Xcode Command Line Tools are {{ 'already installed' if xcode_clt.stat.exists else 'not installed' }}"
+
+- name: Note about Xcode CLT installation
+  ansible.builtin.debug:
+    msg: "Xcode CLT should be installed by bootstrap.sh. If missing, run: xcode-select --install"
+  when: not xcode_clt.stat.exists

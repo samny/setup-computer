@@ -1,0 +1,17 @@
+---
+- name: Check if Podman machine exists
+  ansible.builtin.command: podman machine list --format json
+  register: podman_machine_list
+  changed_when: false
+  failed_when: false
+
+- name: Initialize Podman machine if not exists
+  ansible.builtin.command: podman machine init
+  when: podman_machine_list.stdout == "[]" or podman_machine_list.rc != 0
+  changed_when: true
+
+- name: Start Podman machine
+  ansible.builtin.command: podman machine start
+  register: podman_start
+  changed_when: "'Already running' not in podman_start.stderr"
+  failed_when: podman_start.rc != 0 and 'Already running' not in podman_start.stderr

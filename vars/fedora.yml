@@ -1,0 +1,27 @@
+---
+# Fedora package lists
+
+dnf_packages:
+  - fish
+  - wget
+  - nodejs
+  - python3
+  - python3-pip
+  - podman
+  - podman-compose
+  - micro
+  - gh
+  - git-lfs
+
+# Flatpak applications (mapped from macOS cask names)
+flatpak_apps:
+  - com.slack.Slack
+  - com.visualstudio.code
+  - com.github.IsmaelMartinez.teams_for_linux
+  - org.chromium.Chromium
+  - md.obsidian.Obsidian
+  - org.signal.Signal
+  - com.tailscale.Tailscale
+
+# Note: Some apps may need to be installed manually or from third-party repos
+# starship needs to be installed via script: curl -sS https://starship.rs/install.sh | sh

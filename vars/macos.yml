@@ -1,0 +1,31 @@
+---
+# macOS package lists
+
+homebrew_packages:
+  - fish
+  - starship
+  - wget
+  - node
+  - python
+  - podman
+  - podman-compose
+  - micro
+  - gh
+  - git-lfs
+
+homebrew_casks:
+  - 1password
+  - 1password-cli
+  - slack
+  - visual-studio-code
+  - zed
+  - github
+  - ungoogled-chromium
+  - arc
+  - zen-browser
+  - obsidian
+  - devpod
+  - signal
+  - windows-app
+  - tailscale
+  - protonvpn

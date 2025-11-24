@@ -1,0 +1,55 @@
+---
+- name: Verify 1Password CLI is installed
+  ansible.builtin.command: which op
+  register: op_check
+  failed_when: false
+  changed_when: false
+
+- name: Check if 1Password CLI is authenticated
+  ansible.builtin.command: op account list
+  register: op_auth_check
+  failed_when: false
+  changed_when: false
+  when: op_check.rc == 0
+
+- name: Display 1Password authentication status
+  ansible.builtin.debug:
+    msg: "1Password CLI is {{ 'authenticated' if op_auth_check.rc == 0 else 'not authenticated. Please run: op signin' }}"
+  when: op_check.rc == 0
+
+- name: Get current shell
+  ansible.builtin.command: echo $SHELL
+  register: current_shell
+  changed_when: false
+
+- name: Check if Fish is already the default shell
+  ansible.builtin.set_fact:
+    fish_is_default: "{{ 'fish' in current_shell.stdout }}"
+
+- name: Display current shell
+  ansible.builtin.debug:
+    msg: "Current shell: {{ current_shell.stdout }}"
+
+- name: Prompt to change shell to Fish
+  ansible.builtin.pause:
+    prompt: "Do you want to set Fish as your default shell? (yes/no)"
+  register: change_shell_response
+  when: not fish_is_default
+
+- name: Add Fish to allowed shells
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: "{{ fish_shell_path }}"
+    state: present
+  become: true
+  when: not fish_is_default and change_shell_response.user_input | default('no') | lower in ['yes', 'y']
+
+- name: Change default shell to Fish
+  ansible.builtin.command: "chsh -s {{ fish_shell_path }}"
+  when: not fish_is_default and change_shell_response.user_input | default('no') | lower in ['yes', 'y']
+  changed_when: true
+
+- name: Display shell change message
+  ansible.builtin.debug:
+    msg: "Fish shell is now your default shell. Please restart your terminal or log out and back in."
+  when: not fish_is_default and change_shell_response.user_input | default('no') | lower in ['yes', 'y']

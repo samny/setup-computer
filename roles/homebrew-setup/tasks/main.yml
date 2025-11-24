@@ -1,0 +1,24 @@
+---
+- name: Check if Homebrew is installed
+  ansible.builtin.stat:
+    path: /opt/homebrew/bin/brew
+  register: homebrew_intel
+
+- name: Check if Homebrew is installed (Intel Mac)
+  ansible.builtin.stat:
+    path: /usr/local/bin/brew
+  register: homebrew_arm
+  when: not homebrew_intel.stat.exists
+
+- name: Set Homebrew installed fact
+  ansible.builtin.set_fact:
+    homebrew_installed: "{{ homebrew_intel.stat.exists or homebrew_arm.stat.exists }}"
+
+- name: Display Homebrew status
+  ansible.builtin.debug:
+    msg: "Homebrew is {{ 'already installed' if homebrew_installed else 'not installed' }}"
+
+- name: Update Homebrew
+  community.general.homebrew:
+    update_homebrew: true
+  when: homebrew_installed

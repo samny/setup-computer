@@ -1,0 +1,13 @@
+# Backup directory - contains timestamped backups of existing dotfiles
+dotfiles-backup-*/
+
+# Ansible
+*.retry
+.ansible/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
