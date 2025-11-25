@@ -39,13 +39,14 @@
         name: shell-setup
       tags: [shell, config]
 
-    - name: Run macOS defaults role
-      include_role:
-        name: macos-defaults
-      tags: [macos, config]
-
     - name: Run Podman macOS setup role
       include_role:
         name: podman-macos
       tags: [macos, podman]
+      when: "'podman' in homebrew_packages"
+
+    - name: Run macOS defaults role
+      include_role:
+        name: macos-defaults
+      tags: [macos, config]
       when: "'podman' in homebrew_packages"

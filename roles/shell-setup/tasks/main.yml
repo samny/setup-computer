@@ -14,8 +14,13 @@
 
 - name: Display 1Password authentication status
   ansible.builtin.debug:
-    msg: "1Password CLI is {{ 'authenticated' if op_auth_check.rc == 0 else 'not authenticated. Please run: op signin' }}"
+    msg: "1Password CLI is {{ 'authenticated ✓' if (op_auth_check.rc | default(1)) == 0 else 'NOT authenticated. Run: op signin' }}"
   when: op_check.rc == 0
+
+- name: Warn if 1Password CLI not authenticated
+  ansible.builtin.debug:
+    msg: "WARNING: 1Password CLI is not authenticated. Secrets in dotfiles won't work until you run 'op signin'"
+  when: op_check.rc == 0 and (op_auth_check.rc | default(1)) != 0
 
 - name: Get current shell
   ansible.builtin.command: echo $SHELL

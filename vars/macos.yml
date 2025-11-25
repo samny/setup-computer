@@ -3,29 +3,31 @@
 
 homebrew_packages:
   - fish
-  - starship
-  - wget
-  - node
-  - python
-  - podman
-  - podman-compose
-  - micro
   - gh
   - git-lfs
+  - micro
+  - node
+  - podman
+  - podman-compose
+  - python
+  - starship
+  - wget
 
 homebrew_casks:
   - 1password
   - 1password-cli
-  - slack
-  - visual-studio-code
-  - zed
-  - github
-  - ungoogled-chromium
   - arc
-  - zen-browser
-  - obsidian
   - devpod
-  - signal
-  - windows-app
-  - tailscale
+  - github
+  - iterm2
+  - microsoft-teams
+  - obsidian
   - protonvpn
+  - signal
+  - slack
+  - tailscale
+  - ungoogled-chromium
+  - visual-studio-code
+  - windows-app
+  - zed
+  - zen-browser

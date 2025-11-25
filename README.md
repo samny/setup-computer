@@ -49,6 +49,7 @@ make setup
 ```
 
 This will:
+
 1. Detect your OS
 2. Install prerequisites (Homebrew, Ansible)
 3. Install all packages and applications
