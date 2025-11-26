@@ -96,13 +96,21 @@
   changed_when: true
 
 # Power Management
-- name: Suspend on lid close (AC power)
+- name: Check if lid-close-ac-action key exists
+  ansible.builtin.shell: gsettings list-keys org.gnome.settings-daemon.plugins.power | grep -q lid-close-ac-action
+  register: lid_close_key_exists
+  changed_when: false
+  failed_when: false
+
+- name: Suspend on lid close (AC power) - if supported
   ansible.builtin.shell: gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action 'suspend'
   changed_when: true
+  when: lid_close_key_exists.rc == 0
 
-- name: Suspend on lid close (battery)
+- name: Suspend on lid close (battery) - if supported
   ansible.builtin.shell: gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action 'suspend'
   changed_when: true
+  when: lid_close_key_exists.rc == 0
 
 - name: Show battery percentage in top bar
   ansible.builtin.shell: gsettings set org.gnome.desktop.interface show-battery-percentage true
