@@ -6,6 +6,7 @@ dnf_packages:
   - gh
   - git
   - git-lfs
+  - make
   - micro
   - nodejs
   - npm
