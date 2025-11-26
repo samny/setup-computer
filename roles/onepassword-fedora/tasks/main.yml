@@ -24,14 +24,42 @@
   become: true
   when: not onepassword_repo.stat.exists
 
-- name: Install 1Password
+- name: Refresh DNF cache after adding repository
+  ansible.builtin.dnf:
+    update_cache: true
+  become: true
+  when: not onepassword_repo.stat.exists
+
+- name: Check available 1Password packages
+  ansible.builtin.command: dnf list available | grep -i 1password
+  register: onepassword_available
+  changed_when: false
+  failed_when: false
+  become: true
+
+- name: Display available 1Password packages
+  ansible.builtin.debug:
+    var: onepassword_available.stdout_lines
+
+- name: Install 1Password (if available)
   ansible.builtin.dnf:
     name: 1password
     state: present
   become: true
+  when: onepassword_available.rc == 0 and '1password' in onepassword_available.stdout
+  register: onepassword_install
+  failed_when: false
 
-- name: Install 1Password CLI
+- name: Install 1Password CLI (if available)
   ansible.builtin.dnf:
     name: 1password-cli
     state: present
   become: true
+  when: onepassword_available.rc == 0 and '1password-cli' in onepassword_available.stdout
+  register: onepassword_cli_install
+  failed_when: false
+
+- name: Display 1Password installation note
+  ansible.builtin.debug:
+    msg: "1Password may need to be installed manually from https://1password.com/downloads/linux/"
+  when: onepassword_install is skipped or (onepassword_install.failed | default(false))
