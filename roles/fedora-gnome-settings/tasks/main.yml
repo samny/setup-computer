@@ -26,11 +26,24 @@
     value: "['<Control><Shift>Tab']"
     state: present
 
-# Touchpad Settings - Disable tap to click
+# Touchpad Settings
 - name: Disable tap to click on touchpad
   community.general.dconf:
     key: "/org/gnome/desktop/peripherals/touchpad/tap-to-click"
     value: "false"
+    state: present
+
+- name: Enable natural scrolling (Mac-style)
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/natural-scroll"
+    value: "true"
+    state: present
+
+# Mouse Settings
+- name: Enable natural scrolling for mouse (Mac-style)
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/mouse/natural-scroll"
+    value: "true"
     state: present
 
 # Firefox Scroll Speed Configuration
