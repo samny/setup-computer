@@ -70,9 +70,15 @@ install_ansible_macos() {
             brew install python3
         fi
         pip3 install --user ansible
-        
-        # Add Python user bin to PATH
-        export PATH="$HOME/Library/Python/3.11/bin:$PATH"
+    fi
+    
+    # Add Python user bin to PATH (detect Python version dynamically)
+    PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    PYTHON_USER_BIN="$HOME/Library/Python/${PYTHON_VERSION}/bin"
+    
+    if [[ -d "$PYTHON_USER_BIN" ]]; then
+        export PATH="$PYTHON_USER_BIN:$PATH"
+        log_info "Added $PYTHON_USER_BIN to PATH"
     fi
 }
 
