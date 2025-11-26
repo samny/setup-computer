@@ -28,3 +28,8 @@
       include_role:
         name: shell-setup
       tags: [shell, config]
+
+    - name: Run Fedora GNOME settings role
+      include_role:
+        name: fedora-gnome-settings
+      tags: [fedora, gnome, config]

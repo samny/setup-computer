@@ -1,0 +1,12 @@
+---
+- name: Swap Command and Control keys for Apple keyboard
+  community.general.dconf:
+    key: "/org/gnome/desktop/input-sources/xkb-options"
+    value: "['altwin:ctrl_win']"
+    state: present
+
+- name: Set additional keyboard options for Apple keyboard
+  community.general.dconf:
+    key: "/org/gnome/desktop/input-sources/xkb-options"
+    value: "['altwin:ctrl_win', 'ctrl:swap_lwin_lctl']"
+    state: present
