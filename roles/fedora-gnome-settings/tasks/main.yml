@@ -1,12 +1,66 @@
 ---
-- name: Swap Command and Control keys for Apple keyboard
+# Keyboard Mapping - Swap Command and Control keys (left and right)
+- name: Swap Command and Control keys for Apple keyboard behavior
   community.general.dconf:
     key: "/org/gnome/desktop/input-sources/xkb-options"
-    value: "['altwin:ctrl_win']"
+    value: "['ctrl:swap_rwin_rctl', 'ctrl:swap_lwin_lctl']"
     state: present
 
-- name: Set additional keyboard options for Apple keyboard
+# Keyboard Shortcuts - Overview (Activities)
+- name: Set Overview keyboard shortcut to Ctrl+Space (Cmd+Space)
   community.general.dconf:
-    key: "/org/gnome/desktop/input-sources/xkb-options"
-    value: "['altwin:ctrl_win', 'ctrl:swap_lwin_lctl']"
+    key: "/org/gnome/shell/keybindings/toggle-overview"
+    value: "['<Control>space']"
     state: present
+
+# Keyboard Shortcuts - Switch Applications
+- name: Set switch applications shortcut to Ctrl+Tab (Cmd+Tab)
+  community.general.dconf:
+    key: "/org/gnome/desktop/wm/keybindings/switch-applications"
+    value: "['<Control>Tab']"
+    state: present
+
+- name: Set switch applications backward shortcut to Ctrl+Shift+Tab
+  community.general.dconf:
+    key: "/org/gnome/desktop/wm/keybindings/switch-applications-backward"
+    value: "['<Control><Shift>Tab']"
+    state: present
+
+# Touchpad Settings - Disable tap to click
+- name: Disable tap to click on touchpad
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/tap-to-click"
+    value: "false"
+    state: present
+
+# Firefox Scroll Speed Configuration
+- name: Check if Firefox profiles directory exists
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.mozilla/firefox"
+  register: firefox_dir
+
+- name: Find Firefox profile directories
+  ansible.builtin.find:
+    paths: "{{ ansible_env.HOME }}/.mozilla/firefox"
+    patterns: "*.default*"
+    file_type: directory
+  register: firefox_profiles
+  when: firefox_dir.stat.exists
+
+- name: Create user.js in Firefox profile to reduce scroll speed
+  ansible.builtin.lineinfile:
+    path: "{{ item.path }}/user.js"
+    line: 'user_pref("mousewheel.default.delta_multiplier_x", 50);'
+    create: true
+    mode: "0644"
+  loop: "{{ firefox_profiles.files }}"
+  when: firefox_dir.stat.exists and firefox_profiles.files | length > 0
+
+- name: Set Firefox Y scroll speed multiplier
+  ansible.builtin.lineinfile:
+    path: "{{ item.path }}/user.js"
+    line: 'user_pref("mousewheel.default.delta_multiplier_y", 50);'
+    create: true
+    mode: "0644"
+  loop: "{{ firefox_profiles.files }}"
+  when: firefox_dir.stat.exists and firefox_profiles.files | length > 0
