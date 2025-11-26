@@ -26,11 +26,17 @@
     value: "['<Control><Shift>Tab']"
     state: present
 
-# Touchpad Settings
+# Touchpad Settings - Apple Trackpad Optimization
 - name: Disable tap to click on touchpad
   community.general.dconf:
     key: "/org/gnome/desktop/peripherals/touchpad/tap-to-click"
     value: "false"
+    state: present
+
+- name: Enable two-finger right-click
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/click-method"
+    value: "'fingers'"
     state: present
 
 - name: Enable natural scrolling (Mac-style)
@@ -39,10 +45,129 @@
     value: "true"
     state: present
 
+- name: Disable edge scrolling (use two-finger only)
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/edge-scrolling-enabled"
+    value: "false"
+    state: present
+
+- name: Set touchpad speed (optimized for Apple trackpad)
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/speed"
+    value: "0.3"
+    state: present
+
+- name: Enable touchpad acceleration
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/accel-profile"
+    value: "'adaptive'"
+    state: present
+
+- name: Enable middle-click emulation (three-finger tap)
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/middle-click-emulation"
+    value: "true"
+    state: present
+
 # Mouse Settings
 - name: Enable natural scrolling for mouse (Mac-style)
   community.general.dconf:
     key: "/org/gnome/desktop/peripherals/mouse/natural-scroll"
+    value: "true"
+    state: present
+
+- name: Set mouse acceleration profile
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/mouse/accel-profile"
+    value: "'adaptive'"
+    state: present
+
+- name: Set mouse speed
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/mouse/speed"
+    value: "0.0"
+    state: present
+
+# Keyboard Behavior
+- name: Disable Caps Lock delay
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/keyboard/delay"
+    value: "uint32 200"
+    state: present
+
+- name: Set keyboard repeat rate
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/keyboard/repeat-interval"
+    value: "uint32 30"
+    state: present
+
+# Display & UI Settings
+- name: Enable fractional scaling for HiDPI displays
+  community.general.dconf:
+    key: "/org/gnome/mutter/experimental-features"
+    value: "['scale-monitor-framebuffer']"
+    state: present
+
+- name: Enable Night Light
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
+    value: "true"
+    state: present
+
+- name: Set Night Light temperature (warmer)
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
+    value: "uint32 3700"
+    state: present
+
+- name: Enable Night Light schedule (sunset to sunrise)
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic"
+    value: "true"
+    state: present
+
+# Power Management
+- name: Suspend on lid close (AC power)
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/power/lid-close-ac-action"
+    value: "'suspend'"
+    state: present
+
+- name: Suspend on lid close (battery)
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/power/lid-close-battery-action"
+    value: "'suspend'"
+    state: present
+
+- name: Show battery percentage in top bar
+  community.general.dconf:
+    key: "/org/gnome/desktop/interface/show-battery-percentage"
+    value: "true"
+    state: present
+
+# Audio Settings
+- name: Enable over-amplification (volume >100%)
+  community.general.dconf:
+    key: "/org/gnome/desktop/sound/allow-volume-above-100-percent"
+    value: "true"
+    state: present
+
+# Window Management
+- name: Enable focus follows mouse (sloppy mode)
+  community.general.dconf:
+    key: "/org/gnome/desktop/wm/preferences/focus-mode"
+    value: "'sloppy'"
+    state: present
+
+- name: Attach modal dialogs to parent windows
+  community.general.dconf:
+    key: "/org/gnome/mutter/attach-modal-dialogs"
+    value: "true"
+    state: present
+
+- name: Center new windows
+  community.general.dconf:
+    key: "/org/gnome/mutter/center-new-windows"
     value: "true"
     state: present
 
