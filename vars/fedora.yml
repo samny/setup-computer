@@ -21,16 +21,16 @@ dnf_packages:
 # Flatpak applications (mapped from macOS cask names)
 # Tested on Fedora Workstation 43 with Flathub
 flatpak_apps:
+  - app.zen_browser.zen
   - com.slack.Slack
   - com.visualstudio.code
+  - dev.zed.Zed
   - md.obsidian.Obsidian
   - org.chromium.Chromium
   - org.signal.Signal
   - com.protonvpn.www
   # Note: Some apps may not be available on Flathub
-  # - Zed editor: Not yet available on Flathub
   # - Arc browser: Not available on Flathub
-  # - Zen browser: Not available on Flathub
   # - GitHub Desktop: Use web version or gh CLI
   # - 1Password: Install from 1Password's official repo
   # - DevPod: Install from GitHub releases
