@@ -1,27 +1,37 @@
 ---
-# Fedora package lists
+# Fedora package lists (tested on Fedora Workstation 43)
 
 dnf_packages:
   - fish
   - gh
+  - git
   - git-lfs
   - micro
   - nodejs
+  - npm
   - podman
   - podman-compose
   - python3
   - python3-pip
   - wget
+  - curl
+  - util-linux-user # Required for chsh command
+  - dconf # Required for GNOME settings via dconf
 
 # Flatpak applications (mapped from macOS cask names)
+# Tested on Fedora Workstation 43 with Flathub
 flatpak_apps:
-  - com.github.IsmaelMartinez.teams_for_linux
-  - com.protonvpn.www
   - com.slack.Slack
-  - com.tailscale.Tailscale
   - com.visualstudio.code
   - md.obsidian.Obsidian
   - org.chromium.Chromium
   - org.signal.Signal
-# Note: Some apps may need to be installed manually or from third-party repos
-# starship needs to be installed via script: curl -sS https://starship.rs/install.sh | sh
+  - com.protonvpn.www
+  # Note: Some apps may not be available on Flathub
+  # - Zed editor: Not yet available on Flathub
+  # - Arc browser: Not available on Flathub
+  # - Zen browser: Not available on Flathub
+  # - GitHub Desktop: Use web version or gh CLI
+  # - 1Password: Install from 1Password's official repo
+  # - DevPod: Install from GitHub releases
+# Note: starship is installed via script in dnf-packages role

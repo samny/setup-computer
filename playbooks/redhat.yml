@@ -19,6 +19,11 @@
         name: flatpak-apps
       tags: [apps, flatpak]
 
+    - name: Run 1Password setup for Fedora
+      include_role:
+        name: onepassword-fedora
+      tags: [apps, onepassword]
+
     - name: Run dotfiles role
       include_role:
         name: dotfiles

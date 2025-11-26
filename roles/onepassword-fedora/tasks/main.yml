@@ -1,0 +1,37 @@
+---
+# Additional setup for 1Password on Fedora 43
+
+- name: Check if 1Password repository is already configured
+  ansible.builtin.stat:
+    path: /etc/yum.repos.d/1password.repo
+  register: onepassword_repo
+
+- name: Add 1Password GPG key
+  ansible.builtin.rpm_key:
+    key: https://downloads.1password.com/linux/keys/1password.asc
+    state: present
+  become: true
+  when: not onepassword_repo.stat.exists
+
+- name: Add 1Password repository
+  ansible.builtin.yum_repository:
+    name: 1password
+    description: 1Password Stable Channel
+    baseurl: https://downloads.1password.com/linux/rpm/stable/$basearch
+    enabled: true
+    gpgcheck: true
+    gpgkey: https://downloads.1password.com/linux/keys/1password.asc
+  become: true
+  when: not onepassword_repo.stat.exists
+
+- name: Install 1Password
+  ansible.builtin.dnf:
+    name: 1password
+    state: present
+  become: true
+
+- name: Install 1Password CLI
+  ansible.builtin.dnf:
+    name: 1password-cli
+    state: present
+  become: true

@@ -1,4 +1,10 @@
 ---
+- name: Ensure Flatpak is installed
+  ansible.builtin.dnf:
+    name: flatpak
+    state: present
+  become: true
+
 - name: Enable Flathub repository
   community.general.flatpak_remote:
     name: flathub
@@ -11,3 +17,10 @@
     name: "{{ flatpak_apps }}"
     state: present
   become: true
+  register: flatpak_install
+  failed_when: false
+
+- name: Display Flatpak installation results
+  ansible.builtin.debug:
+    msg: "Flatpak apps installed. Note: Some apps may not be available on Flathub."
+  when: flatpak_install is defined
