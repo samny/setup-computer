@@ -133,7 +133,7 @@ main() {
     
     # Run the main playbook
     cd "$(dirname "$0")"
-    ansible-playbook -i inventory/local playbooks/main.yml --ask-become-pass "$@"
+    ansible-playbook -i inventory/local playbooks/main.yml "$@"
 }
 
 main "$@"

@@ -15,27 +15,27 @@ help:
 
 setup:
 	@echo "Running complete setup..."
-	./bootstrap.sh --ask-become-pass
+	./bootstrap.sh
 
 macos:
 	@echo "Running macOS setup..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags macos --ask-become-pass
+	ansible-playbook -i inventory/local playbooks/main.yml --tags macos
 
 fedora:
 	@echo "Running Fedora setup..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags fedora --ask-become-pass
+	ansible-playbook -i inventory/local playbooks/main.yml --tags fedora
 
 packages-only:
 	@echo "Installing packages only..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags packages --ask-become-pass
+	ansible-playbook -i inventory/local playbooks/main.yml --tags packages
 
 apps-only:
 	@echo "Installing applications only..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags apps --ask-become-pass
+	ansible-playbook -i inventory/local playbooks/main.yml --tags apps
 
 dotfiles-only:
 	@echo "Setting up dotfiles only..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags dotfiles --ask-become-pass
+	ansible-playbook -i inventory/local playbooks/main.yml --tags dotfiles
 
 check:
 	@echo "Running in check mode (dry run)..."
