@@ -35,27 +35,21 @@
   ansible.builtin.debug:
     msg: "Current shell: {{ current_shell.stdout }}"
 
-- name: Prompt to change shell to Fish
-  ansible.builtin.pause:
-    prompt: "Do you want to set Fish as your default shell? (yes/no)"
-  register: change_shell_response
-  when: not fish_is_default
-
 - name: Add Fish to allowed shells
   ansible.builtin.lineinfile:
     path: /etc/shells
     line: "{{ fish_shell_path }}"
     state: present
   become: true
-  when: not fish_is_default and change_shell_response.user_input | default('no') | lower in ['yes', 'y']
+  when: not fish_is_default
 
 - name: Change default shell to Fish
   ansible.builtin.command: "chsh -s {{ fish_shell_path }}"
   become: true
-  when: not fish_is_default and change_shell_response.user_input | default('no') | lower in ['yes', 'y']
+  when: not fish_is_default
   changed_when: true
 
 - name: Display shell change message
   ansible.builtin.debug:
     msg: "Fish shell is now your default shell. Please restart your terminal or log out and back in."
-  when: not fish_is_default and change_shell_response.user_input | default('no') | lower in ['yes', 'y']
+  when: not fish_is_default

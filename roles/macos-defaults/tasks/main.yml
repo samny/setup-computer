@@ -7,21 +7,21 @@
     value: "Nlsv"
     state: present
 
-- name: Show hidden files in Finder
-  community.general.osx_defaults:
-    domain: com.apple.finder
-    key: AppleShowAllFiles
-    type: bool
-    value: true
-    state: present
+# - name: Show hidden files in Finder
+#   community.general.osx_defaults:
+#     domain: com.apple.finder
+#     key: AppleShowAllFiles
+#     type: bool
+#     value: true
+#     state: present
 
-- name: Show path bar in Finder
-  community.general.osx_defaults:
-    domain: com.apple.finder
-    key: ShowPathbar
-    type: bool
-    value: true
-    state: present
+# - name: Show path bar in Finder
+#   community.general.osx_defaults:
+#     domain: com.apple.finder
+#     key: ShowPathbar
+#     type: bool
+#     value: true
+#     state: present
 
 - name: Show all filename extensions
   community.general.osx_defaults:
