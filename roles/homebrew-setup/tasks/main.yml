@@ -30,7 +30,8 @@
     mode: '0644'
 
 - name: Refresh sudo timestamp for Homebrew cask installations
-  ansible.builtin.command: sudo -v
+  ansible.builtin.command: /usr/bin/true
+  become: true
   changed_when: false
 
 - name: Install packages and casks from Brewfile
