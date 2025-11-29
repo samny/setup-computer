@@ -1,5 +1,9 @@
 .PHONY: setup macos fedora dotfiles-only apps-only packages-only help check
 
+# Add common Ansible installation paths
+PATH := $(HOME)/.local/bin:/opt/homebrew/bin:/usr/local/bin:$(PATH)
+export PATH
+
 help:
 	@echo "Computer Setup Automation"
 	@echo ""
