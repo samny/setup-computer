@@ -35,59 +35,62 @@
     dest: "{{ ansible_facts['env']['HOME'] }}/.gitconfig"
     mode: "0644"
 
-- name: Ensure git config directory exists
-  ansible.builtin.file:
-    path: "{{ ansible_facts['env']['HOME'] }}/.config/git"
-    state: directory
-    mode: "0755"
+- name: Set dotfiles list
+  ansible.builtin.set_fact:
+    dotfiles_list:
+      - {
+          src: "git/ignore",
+          dest: "{{ ansible_facts['env']['HOME'] }}/.config/git/ignore",
+          parent_dir: "{{ ansible_facts['env']['HOME'] }}/.config/git",
+        }
+      - {
+          src: "fish/config.fish",
+          dest: "{{ ansible_facts['env']['HOME'] }}/.config/fish/config.fish",
+          parent_dir: "{{ ansible_facts['env']['HOME'] }}/.config/fish",
+          backup_name: "fish",
+        }
+      - {
+          src: "starship.toml",
+          dest: "{{ ansible_facts['env']['HOME'] }}/.config/starship.toml",
+          parent_dir: "{{ ansible_facts['env']['HOME'] }}/.config",
+          backup_name: "starship.toml",
+        }
 
-- name: Link global gitignore
-  ansible.builtin.file:
-    src: "{{ playbook_dir }}/../dotfiles/config/git/ignore"
-    dest: "{{ ansible_facts['env']['HOME'] }}/.config/git/ignore"
-    state: link
-    force: true
+- name: Configure dotfiles
+  block:
+    - name: Check for existing configs
+      ansible.builtin.stat:
+        path: "{{ item.dest }}"
+      register: dotfile_stats
+      loop: "{{ dotfiles_list }}"
+      loop_control:
+        label: "{{ item.src }}"
 
-- name: Find existing Fish config
-  ansible.builtin.stat:
-    path: "{{ ansible_facts['env']['HOME'] }}/.config/fish"
-  register: fish_config_stat
+    - name: Backup existing configs
+      ansible.builtin.copy:
+        src: "{{ item.item.dest }}"
+        dest: "{{ dotfiles_backup_dir }}/{{ item.item.backup_name | default(item.item.src | basename) }}"
+        remote_src: true
+      loop: "{{ dotfile_stats.results }}"
+      loop_control:
+        label: "{{ item.item.src }}"
+      when: item.stat.exists and item.item.backup_name is defined
 
-- name: Backup existing Fish config
-  ansible.builtin.copy:
-    src: "{{ ansible_facts['env']['HOME'] }}/.config/fish"
-    dest: "{{ dotfiles_backup_dir }}/fish"
-    remote_src: true
-  when: fish_config_stat.stat.exists and fish_config_stat.stat.isdir
+    - name: Ensure config parent directories exist
+      ansible.builtin.file:
+        path: "{{ item.parent_dir }}"
+        state: directory
+        mode: "0755"
+      loop: "{{ dotfiles_list }}"
+      loop_control:
+        label: "{{ item.parent_dir }}"
 
-- name: Create Fish config directory
-  ansible.builtin.file:
-    path: "{{ ansible_facts['env']['HOME'] }}/.config/fish"
-    state: directory
-    mode: "0755"
-
-- name: Link Fish config from dotfiles
-  ansible.builtin.file:
-    src: "{{ playbook_dir }}/../dotfiles/config/fish/config.fish"
-    dest: "{{ ansible_facts['env']['HOME'] }}/.config/fish/config.fish"
-    state: link
-    force: true
-
-- name: Find existing Starship config
-  ansible.builtin.stat:
-    path: "{{ ansible_facts['env']['HOME'] }}/.config/starship.toml"
-  register: starship_config_stat
-
-- name: Backup existing Starship config
-  ansible.builtin.copy:
-    src: "{{ ansible_facts['env']['HOME'] }}/.config/starship.toml"
-    dest: "{{ dotfiles_backup_dir }}/starship.toml"
-    remote_src: true
-  when: starship_config_stat.stat.exists
-
-- name: Link Starship config from dotfiles
-  ansible.builtin.file:
-    src: "{{ playbook_dir }}/../dotfiles/config/starship.toml"
-    dest: "{{ ansible_facts['env']['HOME'] }}/.config/starship.toml"
-    state: link
-    force: true
+    - name: Create symlinks for dotfiles
+      ansible.builtin.file:
+        src: "{{ playbook_dir }}/../dotfiles/config/{{ item.src }}"
+        dest: "{{ item.dest }}"
+        state: link
+        force: true
+      loop: "{{ dotfiles_list }}"
+      loop_control:
+        label: "{{ item.src }}"

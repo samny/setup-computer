@@ -2,41 +2,40 @@
 - name: macOS Setup
   block:
     - name: Load macOS variables
-      include_vars: ../vars/macos.yml
+      ansible.builtin.import_vars: ../vars/macos.yml
       tags: always
 
     - name: Load common variables
-      include_vars: ../vars/common.yml
+      ansible.builtin.import_vars: ../vars/common.yml
       tags: always
 
     - name: Run Xcode Command Line Tools role
-      include_role:
+      ansible.builtin.include_role:
         name: xcode-clt
       tags: [bootstrap, xcode]
 
     - name: Run Homebrew setup role
-      include_role:
+      ansible.builtin.include_role:
         name: homebrew-setup
       tags: [bootstrap, homebrew, packages, apps]
 
     - name: Run dotfiles role
-      include_role:
+      ansible.builtin.include_role:
         name: dotfiles
       tags: [dotfiles, config]
 
     - name: Run shell setup role
-      include_role:
+      ansible.builtin.include_role:
         name: shell-setup
       tags: [shell, config]
 
     - name: Run Podman macOS setup role
-      include_role:
+      ansible.builtin.include_role:
         name: podman-macos
       tags: [macos, podman]
       when: "'podman' in homebrew_packages"
 
     - name: Run macOS defaults role
-      include_role:
+      ansible.builtin.include_role:
         name: macos-defaults
       tags: [macos, config]
-      when: "'podman' in homebrew_packages"

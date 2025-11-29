@@ -119,8 +119,7 @@ setup-computer/
 │   ├── darwin.yml           # macOS-specific
 │   └── redhat.yml           # Fedora-specific
 ├── roles/                    # Ansible roles
-│   ├── homebrew-packages/   # Install Homebrew packages
-│   ├── homebrew-casks/      # Install Homebrew casks
+│   ├── homebrew-setup/      # Install Homebrew packages and casks
 │   ├── dnf-packages/        # Install DNF packages
 │   ├── flatpak-apps/        # Install Flatpak apps
 │   ├── dotfiles/            # Manage dotfiles
@@ -155,6 +154,34 @@ Edit the variable files to add or remove packages:
 ### Modify macOS Preferences
 
 Edit `roles/macos-defaults/tasks/main.yml` to change system settings.
+
+### Enable Optional Settings
+
+The project includes optional configuration files with additional settings that are commented out by default:
+
+- **macOS**: `roles/macos-defaults/tasks/optional.yml` - Hidden files in Finder, keyboard repeat rates, trackpad settings
+- **Fedora**: `roles/fedora-gnome-settings/tasks/optional.yml` - Keyboard shortcuts, touchpad/mouse settings, Night Light, window management, Firefox scroll speed
+
+To use optional settings:
+
+1. Edit the optional.yml file for your platform
+2. Uncomment the tasks you want to enable
+3. Add the optional file to your playbook:
+
+```yaml
+# In playbooks/darwin.yml or playbooks/redhat.yml
+- name: Run optional macOS/GNOME settings
+  ansible.builtin.include_tasks: roles/macos-defaults/tasks/optional.yml # or fedora-gnome-settings
+  tags: [macos-optional] # or [gnome-optional]
+```
+
+4. Run with the optional tag:
+
+```bash
+ansible-playbook -i inventory/local playbooks/main.yml --tags macos-optional --ask-become-pass
+# or
+ansible-playbook -i inventory/local playbooks/main.yml --tags gnome-optional --ask-become-pass
+```
 
 ## 1Password Integration
 

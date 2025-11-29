@@ -1,4 +1,7 @@
 ---
+# Core macOS system preferences that are applied by default
+# For optional/experimental settings, see optional.yml
+
 - name: Set Finder to always show list view
   community.general.osx_defaults:
     domain: com.apple.finder
@@ -6,22 +9,6 @@
     type: string
     value: "Nlsv"
     state: present
-
-# - name: Show hidden files in Finder
-#   community.general.osx_defaults:
-#     domain: com.apple.finder
-#     key: AppleShowAllFiles
-#     type: bool
-#     value: true
-#     state: present
-
-# - name: Show path bar in Finder
-#   community.general.osx_defaults:
-#     domain: com.apple.finder
-#     key: ShowPathbar
-#     type: bool
-#     value: true
-#     state: present
 
 - name: Show all filename extensions
   community.general.osx_defaults:
@@ -46,38 +33,6 @@
     type: float
     value: 48.0
     state: present
-
-# - name: Set key repeat rate (fastest)
-#   community.general.osx_defaults:
-#     domain: NSGlobalDomain
-#     key: KeyRepeat
-#     type: int
-#     value: 2
-#     state: present
-
-# - name: Set initial key repeat delay
-#   community.general.osx_defaults:
-#     domain: NSGlobalDomain
-#     key: InitialKeyRepeat
-#     type: int
-#     value: 15
-#     state: present
-
-# - name: Enable tap to click
-#   community.general.osx_defaults:
-#     domain: com.apple.AppleMultitouchTrackpad
-#     key: Clicking
-#     type: bool
-#     value: true
-#     state: present
-
-# - name: Set tracking speed
-#   community.general.osx_defaults:
-#     domain: NSGlobalDomain
-#     key: com.apple.trackpad.scaling
-#     type: float
-#     value: 1.5
-#     state: present
 
 - name: Set default save location to Downloads
   community.general.osx_defaults:

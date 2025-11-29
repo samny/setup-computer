@@ -1,0 +1,230 @@
+---
+# Optional GNOME desktop settings
+# These settings are disabled by default but can be enabled selectively.
+# To use these settings, uncomment the desired tasks below and include this file
+# in playbooks/redhat.yml with the gnome-optional tag:
+#
+#   - name: Run GNOME optional settings
+#     ansible.builtin.include_tasks: roles/fedora-gnome-settings/tasks/optional.yml
+#     tags: [gnome, gnome-optional, config]
+#
+# Or run with: ansible-playbook -i inventory/local playbooks/main.yml --tags gnome-optional
+
+# ============================================================================
+# KEYBOARD SHORTCUTS
+# ============================================================================
+
+# - name: Disable default Super key for overview
+#   ansible.builtin.shell: |
+#     gsettings set org.gnome.mutter overlay-key ''
+#   changed_when: true
+#   tags: [keyboard-shortcuts]
+
+# - name: Set Overview keyboard shortcut to Ctrl+Space (Cmd+Space)
+#   ansible.builtin.shell: |
+#     gsettings set org.gnome.shell.keybindings toggle-overview "['<Control>space']"
+#   changed_when: true
+#   tags: [keyboard-shortcuts]
+
+# - name: Set switch applications shortcut to Ctrl+Tab (Cmd+Tab)
+#   ansible.builtin.shell: |
+#     gsettings set org.gnome.desktop.wm.keybindings switch-applications "['<Control>Tab']"
+#   changed_when: true
+#   tags: [keyboard-shortcuts]
+
+# - name: Set switch applications backward shortcut to Ctrl+Shift+Tab
+#   ansible.builtin.shell: |
+#     gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<Control><Shift>Tab']"
+#   changed_when: true
+#   tags: [keyboard-shortcuts]
+
+# ============================================================================
+# TOUCHPAD SETTINGS
+# ============================================================================
+
+# - name: Disable tap to click on touchpad
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click false
+#   changed_when: true
+#   tags: [touchpad]
+
+# - name: Enable two-finger right-click
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.touchpad click-method 'fingers'
+#   changed_when: true
+#   tags: [touchpad]
+
+# - name: Enable natural scrolling (Mac-style)
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll true
+#   changed_when: true
+#   tags: [touchpad]
+
+# - name: Disable edge scrolling (use two-finger only)
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.touchpad edge-scrolling-enabled false
+#   changed_when: true
+#   tags: [touchpad]
+
+# - name: Set touchpad speed (optimized for Apple trackpad)
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.touchpad speed 0.3
+#   changed_when: true
+#   tags: [touchpad]
+
+# - name: Enable touchpad acceleration
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.touchpad accel-profile 'adaptive'
+#   changed_when: true
+#   tags: [touchpad]
+
+# - name: Enable middle-click emulation (three-finger tap)
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.touchpad middle-click-emulation true
+#   changed_when: true
+#   tags: [touchpad]
+
+# ============================================================================
+# MOUSE SETTINGS
+# ============================================================================
+
+# - name: Enable natural scrolling for mouse (Mac-style)
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.mouse natural-scroll true
+#   changed_when: true
+#   tags: [mouse]
+
+# - name: Set mouse acceleration profile
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.mouse accel-profile 'adaptive'
+#   changed_when: true
+#   tags: [mouse]
+
+# - name: Set mouse speed
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.mouse speed 0.0
+#   changed_when: true
+#   tags: [mouse]
+
+# ============================================================================
+# KEYBOARD BEHAVIOR
+# ============================================================================
+
+# - name: Set keyboard delay
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.keyboard delay 200
+#   changed_when: true
+#   tags: [keyboard]
+
+# - name: Set keyboard repeat rate
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 30
+#   changed_when: true
+#   tags: [keyboard]
+
+# ============================================================================
+# DISPLAY & UI SETTINGS
+# ============================================================================
+
+# - name: Enable fractional scaling for HiDPI displays
+#   ansible.builtin.shell: gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+#   changed_when: true
+#   tags: [display]
+
+# - name: Enable Night Light
+#   ansible.builtin.shell: gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+#   changed_when: true
+#   tags: [display]
+
+# - name: Set Night Light temperature (warmer)
+#   ansible.builtin.shell: gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 3700
+#   changed_when: true
+#   tags: [display]
+
+# - name: Enable Night Light schedule (sunset to sunrise)
+#   ansible.builtin.shell: gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic true
+#   changed_when: true
+#   tags: [display]
+
+# ============================================================================
+# POWER MANAGEMENT
+# ============================================================================
+
+# - name: Check if lid-close-ac-action key exists
+#   ansible.builtin.shell: gsettings list-keys org.gnome.settings-daemon.plugins.power | grep -q lid-close-ac-action
+#   register: lid_close_key_exists
+#   changed_when: false
+#   failed_when: false
+#   tags: [power]
+
+# - name: Suspend on lid close (AC power) - if supported
+#   ansible.builtin.shell: gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action 'suspend'
+#   changed_when: true
+#   when: lid_close_key_exists.rc == 0
+#   tags: [power]
+
+# - name: Suspend on lid close (battery) - if supported
+#   ansible.builtin.shell: gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action 'suspend'
+#   changed_when: true
+#   when: lid_close_key_exists.rc == 0
+#   tags: [power]
+
+# - name: Show battery percentage in top bar
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.interface show-battery-percentage true
+#   changed_when: true
+#   tags: [power]
+
+# ============================================================================
+# AUDIO SETTINGS
+# ============================================================================
+
+# - name: Enable over-amplification (volume >100%)
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.sound allow-volume-above-100-percent true
+#   changed_when: true
+#   tags: [audio]
+
+# ============================================================================
+# WINDOW MANAGEMENT
+# ============================================================================
+
+# - name: Enable focus follows mouse (sloppy mode)
+#   ansible.builtin.shell: gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+#   changed_when: true
+#   tags: [window-management]
+
+# - name: Attach modal dialogs to parent windows
+#   ansible.builtin.shell: gsettings set org.gnome.mutter attach-modal-dialogs true
+#   changed_when: true
+#   tags: [window-management]
+
+# - name: Center new windows
+#   ansible.builtin.shell: gsettings set org.gnome.mutter center-new-windows true
+#   changed_when: true
+#   tags: [window-management]
+
+# ============================================================================
+# FIREFOX SCROLL SPEED CONFIGURATION
+# ============================================================================
+
+# - name: Check if Firefox profiles directory exists
+#   ansible.builtin.stat:
+#     path: "{{ ansible_facts['env']['HOME'] }}/.mozilla/firefox"
+#   register: firefox_dir
+#   tags: [firefox]
+
+# - name: Find Firefox profile directories
+#   ansible.builtin.find:
+#     paths: "{{ ansible_facts['env']['HOME'] }}/.mozilla/firefox"
+#     patterns: "*.default*"
+#     file_type: directory
+#   register: firefox_profiles
+#   when: firefox_dir.stat.exists
+#   tags: [firefox]
+
+# - name: Create user.js in Firefox profile to reduce scroll speed
+#   ansible.builtin.lineinfile:
+#     path: "{{ item.path }}/user.js"
+#     line: 'user_pref("mousewheel.default.delta_multiplier_x", 50);'
+#     create: true
+#     mode: "0644"
+#   loop: "{{ firefox_profiles.files }}"
+#   when: firefox_dir.stat.exists and firefox_profiles.files | length > 0
+#   tags: [firefox]
+
+# - name: Set Firefox Y scroll speed multiplier
+#   ansible.builtin.lineinfile:
+#     path: "{{ item.path }}/user.js"
+#     line: 'user_pref("mousewheel.default.delta_multiplier_y", 50);'
+#     create: true
+#     mode: "0644"
+#   loop: "{{ firefox_profiles.files }}"
+#   when: firefox_dir.stat.exists and firefox_profiles.files | length > 0
+#   tags: [firefox]

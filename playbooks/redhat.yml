@@ -2,39 +2,39 @@
 - name: Fedora Setup
   block:
     - name: Load Fedora variables
-      include_vars: ../vars/fedora.yml
+      ansible.builtin.import_vars: ../vars/fedora.yml
       tags: always
 
     - name: Load common variables
-      include_vars: ../vars/common.yml
+      ansible.builtin.import_vars: ../vars/common.yml
       tags: always
 
     - name: Run DNF packages role
-      include_role:
+      ansible.builtin.include_role:
         name: dnf-packages
       tags: [packages, dnf]
 
     - name: Run Flatpak apps role
-      include_role:
+      ansible.builtin.include_role:
         name: flatpak-apps
       tags: [apps, flatpak]
 
     - name: Run 1Password setup for Fedora
-      include_role:
+      ansible.builtin.include_role:
         name: onepassword-fedora
       tags: [apps, onepassword]
 
     - name: Run dotfiles role
-      include_role:
+      ansible.builtin.include_role:
         name: dotfiles
       tags: [dotfiles, config]
 
     - name: Run shell setup role
-      include_role:
+      ansible.builtin.include_role:
         name: shell-setup
       tags: [shell, config]
 
     - name: Run Fedora GNOME settings role
-      include_role:
+      ansible.builtin.include_role:
         name: fedora-gnome-settings
       tags: [fedora, gnome, config]

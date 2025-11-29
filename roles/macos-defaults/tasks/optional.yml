@@ -1,0 +1,93 @@
+---
+# Optional macOS system preferences
+# These settings are disabled by default but can be enabled selectively.
+# To use these settings, uncomment the desired tasks below and include this file
+# in playbooks/darwin.yml with the macos-optional tag:
+#
+#   - name: Run macOS optional defaults role
+#     ansible.builtin.include_tasks: roles/macos-defaults/tasks/optional.yml
+#     tags: [macos, macos-optional, config]
+#
+# Or run with: ansible-playbook -i inventory/local playbooks/main.yml --tags macos-optional
+
+# ============================================================================
+# FINDER SETTINGS
+# ============================================================================
+
+# - name: Show hidden files in Finder
+#   community.general.osx_defaults:
+#     domain: com.apple.finder
+#     key: AppleShowAllFiles
+#     type: bool
+#     value: true
+#     state: present
+#   tags: [finder]
+
+# - name: Show path bar in Finder
+#   community.general.osx_defaults:
+#     domain: com.apple.finder
+#     key: ShowPathbar
+#     type: bool
+#     value: true
+#     state: present
+#   tags: [finder]
+
+# ============================================================================
+# KEYBOARD SETTINGS
+# ============================================================================
+
+# - name: Set key repeat rate (fastest)
+#   community.general.osx_defaults:
+#     domain: NSGlobalDomain
+#     key: KeyRepeat
+#     type: int
+#     value: 2
+#     state: present
+#   tags: [keyboard]
+
+# - name: Set initial key repeat delay
+#   community.general.osx_defaults:
+#     domain: NSGlobalDomain
+#     key: InitialKeyRepeat
+#     type: int
+#     value: 15
+#     state: present
+#   tags: [keyboard]
+
+# ============================================================================
+# TRACKPAD SETTINGS
+# ============================================================================
+
+# - name: Enable tap to click
+#   community.general.osx_defaults:
+#     domain: com.apple.AppleMultitouchTrackpad
+#     key: Clicking
+#     type: bool
+#     value: true
+#     state: present
+#   tags: [trackpad]
+
+# - name: Set tracking speed
+#   community.general.osx_defaults:
+#     domain: NSGlobalDomain
+#     key: com.apple.trackpad.scaling
+#     type: float
+#     value: 1.5
+#     state: present
+#   tags: [trackpad]
+
+# ============================================================================
+# RESTART SERVICES (if any optional settings were enabled)
+# ============================================================================
+
+# - name: Restart Finder to apply optional changes
+#   ansible.builtin.command: killall Finder
+#   changed_when: true
+#   failed_when: false
+#   tags: [finder]
+
+# - name: Restart Dock to apply optional changes
+#   ansible.builtin.command: killall Dock
+#   changed_when: true
+#   failed_when: false
+#   tags: [dock]
