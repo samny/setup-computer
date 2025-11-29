@@ -1,0 +1,12 @@
+# Brewfile for macOS setup
+# Install with: brew bundle --file=~/Brewfile
+
+# CLI Tools
+{% for package in homebrew_packages %}
+brew "{{ package }}"
+{% endfor %}
+
+# GUI Applications
+{% for cask in homebrew_casks %}
+cask "{{ cask }}"
+{% endfor %}

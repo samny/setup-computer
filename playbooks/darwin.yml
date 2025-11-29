@@ -17,17 +17,7 @@
     - name: Run Homebrew setup role
       include_role:
         name: homebrew-setup
-      tags: [bootstrap, homebrew]
-
-    - name: Run Homebrew packages role
-      include_role:
-        name: homebrew-packages
-      tags: [packages, homebrew]
-
-    - name: Run Homebrew casks role
-      include_role:
-        name: homebrew-casks
-      tags: [apps, homebrew]
+      tags: [bootstrap, homebrew, packages, apps]
 
     - name: Run dotfiles role
       include_role:

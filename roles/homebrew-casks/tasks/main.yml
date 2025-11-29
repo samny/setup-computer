@@ -1,9 +1,0 @@
----
-- name: Install Homebrew cask applications
-  community.general.homebrew_cask:
-    name: "{{ item }}"
-    state: present
-    sudo_password: ""
-  loop: "{{ homebrew_casks }}"
-  environment:
-    HOMEBREW_CASK_OPTS: "--no-quarantine"

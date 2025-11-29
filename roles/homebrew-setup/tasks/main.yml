@@ -22,3 +22,17 @@
   community.general.homebrew:
     update_homebrew: true
   when: homebrew_installed
+
+- name: Generate Brewfile from template
+  ansible.builtin.template:
+    src: Brewfile.j2
+    dest: "{{ ansible_env.HOME }}/Brewfile"
+    mode: '0644'
+
+- name: Install packages and casks from Brewfile
+  ansible.builtin.command:
+    cmd: brew bundle --file={{ ansible_env.HOME }}/Brewfile
+  register: brew_bundle_result
+  changed_when: "'Installing' in brew_bundle_result.stdout or 'Upgrading' in brew_bundle_result.stdout"
+  environment:
+    HOMEBREW_NO_AUTO_UPDATE: "1"
