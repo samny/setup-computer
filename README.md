@@ -99,6 +99,7 @@ ansible-playbook -i inventory/local playbooks/main.yml --tags dotfiles
 - **Development**: visual-studio-code, zed, github, devpod
 - **Browsers**: ungoogled-chromium, arc, zen-browser
 - **Utilities**: signal, windows-app, tailscale, protonvpn
+- **Fonts**: FiraCode Nerd Font (with ligatures and powerline symbols)
 
 ### GUI Applications (Fedora)
 
@@ -167,6 +168,26 @@ end
 ```
 
 Uncomment and customize as needed after signing in to 1Password CLI.
+
+## Manual Configuration
+
+### Terminal Fonts
+
+FiraCode Nerd Font is installed automatically. To configure it in your terminal:
+
+**Terminal.app:**
+1. Terminal → Settings → Profiles
+2. Select a profile (e.g., "Basic")
+3. Click "Font" → Change to "FiraCodeNerdFont-Regular" or "FiraCodeNerdFontMono-Regular"
+4. Recommended size: 13pt
+5. Set as default profile
+
+**iTerm2:**
+1. iTerm2 → Settings → Profiles → Text
+2. Click "Font" dropdown
+3. Select "FiraCodeNerdFont-Regular" or "FiraCodeNerdFontMono-Regular"
+4. Recommended size: 13pt
+5. Enable "Use ligatures" for programming symbols
 
 ## Troubleshooting
 

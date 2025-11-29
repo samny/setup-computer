@@ -87,58 +87,6 @@
     value: "{{ ansible_facts['env']['HOME'] }}/Downloads"
     state: present
 
-- name: Remove corrupted Terminal preferences if exists
-  ansible.builtin.file:
-    path: "{{ ansible_facts['env']['HOME'] }}/Library/Preferences/com.apple.Terminal.plist"
-    state: absent
-  when: false # Only run manually if Terminal won't start
-  tags: [never, fix-terminal]
-
-- name: Ensure iTerm2 DynamicProfiles directory exists
-  ansible.builtin.file:
-    path: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/iTerm2/DynamicProfiles"
-    state: directory
-    mode: "0755"
-
-- name: Create iTerm2 dynamic profile for FiraCode Nerd Font
-  ansible.builtin.copy:
-    content: |
-      {
-        "Profiles": [
-          {
-            "Name": "FiraCode Nerd Font",
-            "Guid": "FiraCode-Profile-NerdFont",
-            "Dynamic Profile Parent Name": "Default",
-            "Normal Font": "FiraCodeNerdFontMono-Regular 13",
-            "Use Non-ASCII Font": false,
-            "ASCII Ligatures": true,
-            "Horizontal Spacing": 1.0,
-            "Vertical Spacing": 1.0
-          }
-        ]
-      }
-    dest: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/iTerm2/DynamicProfiles/firacode.json"
-    mode: "0644"
-
-- name: Display font configuration message
-  ansible.builtin.debug:
-    msg: |
-      FiraCode Nerd Font has been installed.
-
-      To configure Terminal.app manually:
-        1. Terminal → Settings → Profiles
-        2. Select a profile (e.g., "Basic")
-        3. Click "Font" → Change to "FiraCodeNerdFont-Regular" size 13
-        4. Set as default profile
-
-      To configure iTerm2:
-        1. Open iTerm2 → Settings → Profiles
-        2. Select "FiraCode" profile
-        3. Other Actions → Set as Default
-
-      If Terminal won't start, reset preferences with:
-        rm ~/Library/Preferences/com.apple.Terminal.plist
-
 - name: Restart Finder to apply changes
   ansible.builtin.command: killall Finder
   changed_when: true
