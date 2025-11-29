@@ -18,9 +18,9 @@ style = "bold purple"
 [git_status]
 style = "bold red"
 conflicted = " 🏳"
-ahead = " ⇡\${count}"
-behind = " ⇣\${count}"
-diverged = " ⇕⇡\${ahead_count}⇣\${behind_count}"
+ahead = ' ⇡${count}'
+behind = ' ⇣${count}'
+diverged = ' ⇕⇡${ahead_count}⇣${behind_count}'
 untracked = " 🤷"
 stashed = " 📦"
 modified = " 📝"
