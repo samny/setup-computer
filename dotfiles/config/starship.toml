@@ -1,29 +1,7 @@
 # Starship configuration
 # https://starship.rs/config/
 
-format = """
-[┌───────────────────>](bold green)
-[│](bold green)$directory$git_branch$git_status
-[└─>](bold green) """
-
-[directory]
-truncation_length = 3
-truncate_to_repo = true
-style = "bold cyan"
-
-[git_branch]
-symbol = " "
-style = "bold purple"
-
 [git_status]
-style = "bold red"
-conflicted = " 🏳"
 ahead = ' ⇡${count}'
 behind = ' ⇣${count}'
 diverged = ' ⇕⇡${ahead_count}⇣${behind_count}'
-untracked = " 🤷"
-stashed = " 📦"
-modified = " 📝"
-staged = " ➕"
-renamed = " ✍"
-deleted = " 🗑"
