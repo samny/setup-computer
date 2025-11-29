@@ -106,12 +106,14 @@
       {
         "Profiles": [
           {
-            "Name": "FiraCode",
-            "Guid": "FiraCode-Profile",
+            "Name": "FiraCode Nerd Font",
+            "Guid": "FiraCode-Profile-NerdFont",
             "Dynamic Profile Parent Name": "Default",
-            "Normal Font": "FiraCodeNerdFont-Regular 13",
-            "Non Ascii Font": "FiraCodeNerdFont-Regular 13",
-            "Use Non-ASCII Font": false
+            "Normal Font": "FiraCodeNerdFontMono-Regular 13",
+            "Use Non-ASCII Font": false,
+            "ASCII Ligatures": true,
+            "Horizontal Spacing": 1.0,
+            "Vertical Spacing": 1.0
           }
         ]
       }
