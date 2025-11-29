@@ -34,5 +34,26 @@
     cmd: brew bundle --file={{ ansible_facts['env']['HOME'] }}/Brewfile
   register: brew_bundle_result
   changed_when: "'Installing' in brew_bundle_result.stdout or 'Upgrading' in brew_bundle_result.stdout"
+  failed_when: false
+  become: true
+  become_user: "{{ ansible_facts['user_id'] }}"
   environment:
     HOMEBREW_NO_AUTO_UPDATE: "1"
+
+- name: Check for failed installations
+  ansible.builtin.set_fact:
+    brew_failures: "{{ brew_bundle_result.stderr_lines | select('search', 'failed') | list }}"
+  when: brew_bundle_result.rc != 0
+
+- name: Display installation summary
+  ansible.builtin.debug:
+    msg: |
+      {% if brew_bundle_result.rc == 0 %}
+      ✓ All Homebrew packages and casks installed successfully
+      {% else %}
+      ⚠ Homebrew bundle completed with some failures:
+      {{ brew_failures | join('\n') }}
+      
+      To retry failed installations manually:
+      brew bundle --file={{ ansible_facts['env']['HOME'] }}/Brewfile
+      {% endif %}
