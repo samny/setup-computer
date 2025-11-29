@@ -43,8 +43,8 @@
   community.general.osx_defaults:
     domain: com.apple.dock
     key: tilesize
-    type: int
-    value: 48
+    type: float
+    value: 48.0
     state: present
 
 # - name: Set key repeat rate (fastest)
