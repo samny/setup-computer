@@ -19,23 +19,23 @@ setup:
 
 macos:
 	@echo "Running macOS setup..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags macos
+	ansible-playbook -i inventory/local playbooks/main.yml --tags macos --ask-become-pass
 
 fedora:
 	@echo "Running Fedora setup..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags fedora
+	ansible-playbook -i inventory/local playbooks/main.yml --tags fedora --ask-become-pass
 
 packages-only:
 	@echo "Installing packages only..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags packages
+	ansible-playbook -i inventory/local playbooks/main.yml --tags packages --ask-become-pass
 
 apps-only:
 	@echo "Installing applications only..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags apps
+	ansible-playbook -i inventory/local playbooks/main.yml --tags apps --ask-become-pass
 
 dotfiles-only:
 	@echo "Setting up dotfiles only..."
-	ansible-playbook -i inventory/local playbooks/main.yml --tags dotfiles
+	ansible-playbook -i inventory/local playbooks/main.yml --tags dotfiles --ask-become-pass
 
 check:
 	@echo "Running in check mode (dry run)..."

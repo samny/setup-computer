@@ -134,12 +134,8 @@ main() {
     # Run the main playbook
     cd "$(dirname "$0")"
     
-    # On macOS, don't use --ask-become-pass as Homebrew handles sudo internally
-    if [[ "$OS" == "macos" ]]; then
-        ansible-playbook -i inventory/local playbooks/main.yml "$@"
-    else
-        ansible-playbook -i inventory/local playbooks/main.yml --ask-become-pass "$@"
-    fi
+    # Always ask for sudo password as some tasks require it
+    ansible-playbook -i inventory/local playbooks/main.yml --ask-become-pass "$@"
 }
 
 main "$@"
