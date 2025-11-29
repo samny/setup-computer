@@ -176,6 +176,7 @@ Uncomment and customize as needed after signing in to 1Password CLI.
 FiraCode Nerd Font is installed automatically. To configure it in your terminal:
 
 **Terminal.app:**
+
 1. Terminal → Settings → Profiles
 2. Select a profile (e.g., "Basic")
 3. Click "Font" → Change to "FiraCodeNerdFont-Regular" or "FiraCodeNerdFontMono-Regular"
@@ -183,6 +184,7 @@ FiraCode Nerd Font is installed automatically. To configure it in your terminal:
 5. Set as default profile
 
 **iTerm2:**
+
 1. iTerm2 → Settings → Profiles → Text
 2. Click "Font" dropdown
 3. Select "FiraCodeNerdFont-Regular" or "FiraCodeNerdFontMono-Regular"
