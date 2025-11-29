@@ -87,22 +87,12 @@
     value: "{{ ansible_facts['env']['HOME'] }}/Downloads"
     state: present
 
-- name: Configure Terminal.app to use FiraCode Nerd Font
-  ansible.builtin.shell: |
-    # Close Terminal.app if running
-    killall Terminal 2>/dev/null || true
-    sleep 1
-
-    # Set font for the default "Basic" profile using defaults
-    defaults write com.apple.Terminal "Window Settings" -dict-add "Basic" "$(defaults read com.apple.Terminal "Window Settings" | plutil -extract Basic xml1 -o - - | sed 's|<string>Monaco 10</string>|<string>FiraCodeNerdFont-Regular 13</string>|g' | plutil -convert binary1 -o - - | base64)"
-
-    # Set Basic as default profile
-    defaults write com.apple.Terminal "Default Window Settings" -string "Basic"
-    defaults write com.apple.Terminal "Startup Window Settings" -string "Basic"
-  args:
-    executable: /bin/bash
-  changed_when: true
-  failed_when: false
+- name: Remove corrupted Terminal preferences if exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Library/Preferences/com.apple.Terminal.plist"
+    state: absent
+  when: false # Only run manually if Terminal won't start
+  tags: [never, fix-terminal]
 
 - name: Ensure iTerm2 DynamicProfiles directory exists
   ansible.builtin.file:
@@ -131,11 +121,21 @@
 - name: Display font configuration message
   ansible.builtin.debug:
     msg: |
-      FiraCode Nerd Font has been configured.
+      FiraCode Nerd Font has been installed.
 
-      Terminal.app: Font is set in the "Basic" profile (restart Terminal to apply)
-      iTerm2: A "FiraCode" profile has been created. Set it as default in:
-        iTerm2 → Settings → Profiles → Other Actions → Set as Default
+      To configure Terminal.app manually:
+        1. Terminal → Settings → Profiles
+        2. Select a profile (e.g., "Basic")
+        3. Click "Font" → Change to "FiraCodeNerdFont-Regular" size 13
+        4. Set as default profile
+
+      To configure iTerm2:
+        1. Open iTerm2 → Settings → Profiles
+        2. Select "FiraCode" profile
+        3. Other Actions → Set as Default
+
+      If Terminal won't start, reset preferences with:
+        rm ~/Library/Preferences/com.apple.Terminal.plist
 
 - name: Restart Finder to apply changes
   ansible.builtin.command: killall Finder
