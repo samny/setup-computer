@@ -26,5 +26,5 @@
 - name: Start Podman machine
   ansible.builtin.command: podman machine start
   register: podman_start
-  changed_when: "'Already running' not in podman_start.stderr"
-  failed_when: podman_start.rc != 0 and 'Already running' not in podman_start.stderr
+  changed_when: "'already running' not in podman_start.stderr"
+  failed_when: podman_start.rc != 0 and 'already running' not in podman_start.stderr
