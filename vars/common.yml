@@ -5,7 +5,7 @@ git_user_name: "Samuel Nystedt"
 git_user_email: "samuel@nystedt.me"
 
 # Backup directory for existing dotfiles
-dotfiles_backup_dir: "{{ ansible_env.HOME }}/dotfiles-backup-{{ ansible_date_time.epoch }}"
+dotfiles_backup_dir: "{{ ansible_facts['env']['HOME'] }}/dotfiles-backup-{{ ansible_facts['date_time']['epoch'] }}"
 
 # Fish shell path
-fish_shell_path: "{{ '/opt/homebrew/bin/fish' if ansible_os_family == 'Darwin' else '/usr/bin/fish' }}"
+fish_shell_path: "{{ '/opt/homebrew/bin/fish' if ansible_facts['os_family'] == 'Darwin' else '/usr/bin/fish' }}"

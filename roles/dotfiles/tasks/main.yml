@@ -7,24 +7,24 @@
 
 - name: Ensure XDG config directory exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.config"
+    path: "{{ ansible_facts['env']['HOME'] }}/.config"
     state: directory
     mode: "0755"
 
 - name: Ensure XDG local share directory exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.local/share"
+    path: "{{ ansible_facts['env']['HOME'] }}/.local/share"
     state: directory
     mode: "0755"
 
 - name: Check if gitconfig exists
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.gitconfig"
+    path: "{{ ansible_facts['env']['HOME'] }}/.gitconfig"
   register: gitconfig_stat
 
 - name: Backup existing gitconfig
   ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/.gitconfig"
+    src: "{{ ansible_facts['env']['HOME'] }}/.gitconfig"
     dest: "{{ dotfiles_backup_dir }}/.gitconfig"
     remote_src: true
   when: gitconfig_stat.stat.exists
@@ -32,42 +32,42 @@
 - name: Create gitconfig from template
   ansible.builtin.template:
     src: gitconfig.j2
-    dest: "{{ ansible_env.HOME }}/.gitconfig"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.gitconfig"
     mode: "0644"
 
 - name: Find existing Fish config
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.config/fish"
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/fish"
   register: fish_config_stat
 
 - name: Backup existing Fish config
   ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/.config/fish"
+    src: "{{ ansible_facts['env']['HOME'] }}/.config/fish"
     dest: "{{ dotfiles_backup_dir }}/fish"
     remote_src: true
   when: fish_config_stat.stat.exists and fish_config_stat.stat.isdir
 
 - name: Create Fish config directory
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.config/fish"
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/fish"
     state: directory
     mode: "0755"
 
 - name: Link Fish config from dotfiles
   ansible.builtin.file:
     src: "{{ playbook_dir }}/../dotfiles/config/fish/config.fish"
-    dest: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.config/fish/config.fish"
     state: link
     force: true
 
 - name: Find existing Starship config
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.config/starship.toml"
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/starship.toml"
   register: starship_config_stat
 
 - name: Backup existing Starship config
   ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/.config/starship.toml"
+    src: "{{ ansible_facts['env']['HOME'] }}/.config/starship.toml"
     dest: "{{ dotfiles_backup_dir }}/starship.toml"
     remote_src: true
   when: starship_config_stat.stat.exists
@@ -75,6 +75,6 @@
 - name: Link Starship config from dotfiles
   ansible.builtin.file:
     src: "{{ playbook_dir }}/../dotfiles/config/starship.toml"
-    dest: "{{ ansible_env.HOME }}/.config/starship.toml"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.config/starship.toml"
     state: link
     force: true

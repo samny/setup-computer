@@ -1,22 +1,22 @@
 ---
 - name: Create backup directory for GNOME settings
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.config/gnome-settings-backups"
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/gnome-settings-backups"
     state: directory
     mode: '0755'
 
 - name: Get current timestamp for backup
   ansible.builtin.set_fact:
-    backup_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+    backup_timestamp: "{{ ansible_facts['date_time']['iso8601_basic_short'] }}"
 
 - name: Backup current GNOME settings
   ansible.builtin.shell: |
-    dconf dump / > "{{ ansible_env.HOME }}/.config/gnome-settings-backups/gnome-settings-{{ backup_timestamp }}.dconf"
+    dconf dump / > "{{ ansible_facts['env']['HOME'] }}/.config/gnome-settings-backups/gnome-settings-{{ backup_timestamp }}.dconf"
   changed_when: true
 
 - name: Display backup location
   ansible.builtin.debug:
-    msg: "GNOME settings backed up to: {{ ansible_env.HOME }}/.config/gnome-settings-backups/gnome-settings-{{ backup_timestamp }}.dconf"
+    msg: "GNOME settings backed up to: {{ ansible_facts['env']['HOME'] }}/.config/gnome-settings-backups/gnome-settings-{{ backup_timestamp }}.dconf"
 
 # Keyboard Mapping - Swap Command and Control keys (left and right)
 - name: Swap Command and Control keys for Apple keyboard behavior

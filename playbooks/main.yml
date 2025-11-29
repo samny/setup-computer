@@ -5,10 +5,10 @@
 
   tasks:
     - name: Include OS-specific playbook
-      include_tasks: "{{ ansible_os_family | lower }}.yml"
-      when: ansible_os_family in ['Darwin', 'RedHat']
+      include_tasks: "{{ ansible_facts['os_family'] | lower }}.yml"
+      when: ansible_facts['os_family'] in ['Darwin', 'RedHat']
 
     - name: Fail if unsupported OS
       fail:
-        msg: "Unsupported OS: {{ ansible_os_family }}"
-      when: ansible_os_family not in ['Darwin', 'RedHat']
+        msg: "Unsupported OS: {{ ansible_facts['os_family'] }}"
+      when: ansible_facts['os_family'] not in ['Darwin', 'RedHat']
