@@ -87,20 +87,28 @@
     value: "{{ ansible_facts['env']['HOME'] }}/Downloads"
     state: present
 
-- name: Set Terminal font to FiraCode Nerd Font
-  community.general.osx_defaults:
-    domain: com.apple.Terminal
-    key: "Default Window Settings"
-    type: string
-    value: "Pro"
-    state: present
-
-- name: Set Terminal font family
+- name: Configure Terminal.app to use FiraCode Nerd Font
   ansible.builtin.shell: |
-    /usr/libexec/PlistBuddy -c "Delete :'Window Settings':'Pro':'Font'" ~/Library/Preferences/com.apple.Terminal.plist 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Add :'Window Settings':'Pro':'Font' data $(echo 'YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGvEBELDBYXGBkaGx0fIiQmKCosLlUkbnVsbNUNDg8QERITFBVWJGNSYXNZXXAWTLNGB250TmFtZUF0dHJpYnV0ZVYkY2xhc3NfEBFOU0ZvbnRTaXplQXR0cmlidXRlVk5TU2l6ZVhOU0ZvbnROYW1lgAKAA4AGgBAjQCwAAAAAAABfEBdGaXJhQ29kZU5lcmRGb250LVJlZ3VsYXLSHR4gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxAQTlNNdXRhYmxlRGljdGlvbmFyeaMgISNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00h0eJSdfEA9OU011dGFibGVTdHJpbmemJScoI1hOU1N0cmluZ9IHKSorXxAPTlNLZXllZEFyY2hpdmVygAF5JSYrLTAxNDY4Oj1AQ0ZJS0xOTlBSU1RVVlhZW1xdX2BhYmRlaGprbW5wcnN1dnd5ent8fn+BgoSFhoeIiYuMjY+QkZOUlZaYmZqbnJ6fo6SlAAAAAAAAAEIBAAAAAAAALwAAAAAAAAAAAAAAAAAAAKc=' | base64 -D)" ~/Library/Preferences/com.apple.Terminal.plist
+    # Close Terminal.app if running
+    killall Terminal 2>/dev/null || true
+    sleep 1
+    
+    # Set font for the default "Basic" profile using defaults
+    defaults write com.apple.Terminal "Window Settings" -dict-add "Basic" "$(defaults read com.apple.Terminal "Window Settings" | plutil -extract Basic xml1 -o - - | sed 's|<string>Monaco 10</string>|<string>FiraCodeNerdFont-Regular 13</string>|g' | plutil -convert binary1 -o - - | base64)"
+    
+    # Set Basic as default profile
+    defaults write com.apple.Terminal "Default Window Settings" -string "Basic"
+    defaults write com.apple.Terminal "Startup Window Settings" -string "Basic"
+  args:
+    executable: /bin/bash
   changed_when: true
   failed_when: false
+
+- name: Ensure iTerm2 DynamicProfiles directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/iTerm2/DynamicProfiles"
+    state: directory
+    mode: "0755"
 
 - name: Create iTerm2 dynamic profile for FiraCode Nerd Font
   ansible.builtin.copy:
@@ -108,16 +116,26 @@
       {
         "Profiles": [
           {
-            "Name": "Default",
-            "Guid": "Default",
+            "Name": "FiraCode",
+            "Guid": "FiraCode-Profile",
+            "Dynamic Profile Parent Name": "Default",
             "Normal Font": "FiraCodeNerdFont-Regular 13",
-            "Non Ascii Font": "FiraCodeNerdFont-Regular 13"
+            "Non Ascii Font": "FiraCodeNerdFont-Regular 13",
+            "Use Non-ASCII Font": false
           }
         ]
       }
-    dest: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/iTerm2/DynamicProfiles/font.json"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/iTerm2/DynamicProfiles/firacode.json"
     mode: "0644"
-  failed_when: false
+
+- name: Display font configuration message
+  ansible.builtin.debug:
+    msg: |
+      FiraCode Nerd Font has been configured.
+      
+      Terminal.app: Font is set in the "Basic" profile (restart Terminal to apply)
+      iTerm2: A "FiraCode" profile has been created. Set it as default in:
+        iTerm2 → Settings → Profiles → Other Actions → Set as Default
 
 - name: Restart Finder to apply changes
   ansible.builtin.command: killall Finder
