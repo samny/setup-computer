@@ -27,7 +27,7 @@
   ansible.builtin.template:
     src: Brewfile.j2
     dest: "{{ ansible_facts['env']['HOME'] }}/Brewfile"
-    mode: '0644'
+    mode: "0644"
 
 - name: Refresh sudo timestamp for Homebrew cask installations
   ansible.builtin.command: /usr/bin/true
@@ -64,7 +64,7 @@
       {% else %}
       ⚠ Homebrew bundle completed with some failures:
       {{ brew_failures | join('\n') }}
-      
+
       To retry failed installations manually:
       brew bundle --file={{ ansible_facts['env']['HOME'] }}/Brewfile
       {% endif %}

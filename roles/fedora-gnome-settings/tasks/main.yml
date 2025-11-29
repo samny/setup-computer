@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: "{{ ansible_facts['env']['HOME'] }}/.config/gnome-settings-backups"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Get current timestamp for backup
   ansible.builtin.set_fact:
