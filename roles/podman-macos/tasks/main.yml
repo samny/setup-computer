@@ -5,10 +5,15 @@
   changed_when: false
   failed_when: false
 
-- name: Initialize Podman machine if not exists
-  ansible.builtin.command: podman machine init
+- name: Initialize Podman machine with native ARM64 (no Rosetta)
+  ansible.builtin.command: podman machine init --cpus 4 --memory 4096 --disk-size 50 --rootful=false
   when: podman_machine_list.stdout == "[]" or podman_machine_list.rc != 0
   changed_when: true
+
+- name: Display Podman machine info
+  ansible.builtin.debug:
+    msg: "Podman machine initialized with native Apple Silicon support (no Rosetta required)"
+  when: podman_machine_list.stdout == "[]" or podman_machine_list.rc != 0
 
 - name: Start Podman machine
   ansible.builtin.command: podman machine start
