@@ -44,7 +44,7 @@
   when: not fish_is_default
 
 - name: Change default shell to Fish
-  ansible.builtin.command: "chsh -s {{ fish_shell_path }}"
+  ansible.builtin.command: "chsh -s {{ fish_shell_path }} {{ ansible_facts['user_id'] }}"
   become: true
   when: not fish_is_default
   changed_when: true
