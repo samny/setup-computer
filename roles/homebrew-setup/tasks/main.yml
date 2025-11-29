@@ -29,14 +29,24 @@
     dest: "{{ ansible_facts['env']['HOME'] }}/Brewfile"
     mode: '0644'
 
+- name: Refresh sudo timestamp for Homebrew cask installations
+  ansible.builtin.command: sudo -v
+  changed_when: false
+
 - name: Install packages and casks from Brewfile
-  ansible.builtin.command:
-    cmd: brew bundle --file={{ ansible_facts['env']['HOME'] }}/Brewfile
+  ansible.builtin.shell: |
+    # Keep sudo timestamp fresh during brew bundle
+    (while true; do sudo -n true; sleep 50; kill -0 "$$" || exit; done 2>/dev/null) &
+    SUDO_HELPER_PID=$!
+    brew bundle --file={{ ansible_facts['env']['HOME'] }}/Brewfile
+    RESULT=$?
+    kill $SUDO_HELPER_PID 2>/dev/null || true
+    exit $RESULT
+  args:
+    executable: /bin/bash
   register: brew_bundle_result
   changed_when: "'Installing' in brew_bundle_result.stdout or 'Upgrading' in brew_bundle_result.stdout"
   failed_when: false
-  become: true
-  become_user: "{{ ansible_facts['user_id'] }}"
   environment:
     HOMEBREW_NO_AUTO_UPDATE: "1"
 
