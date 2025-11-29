@@ -35,6 +35,19 @@
     dest: "{{ ansible_facts['env']['HOME'] }}/.gitconfig"
     mode: "0644"
 
+- name: Ensure git config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/git"
+    state: directory
+    mode: "0755"
+
+- name: Link global gitignore
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/../dotfiles/config/git/ignore"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.config/git/ignore"
+    state: link
+    force: true
+
 - name: Find existing Fish config
   ansible.builtin.stat:
     path: "{{ ansible_facts['env']['HOME'] }}/.config/fish"
