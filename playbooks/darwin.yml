@@ -2,11 +2,11 @@
 - name: macOS Setup
   block:
     - name: Load macOS variables
-      ansible.builtin.import_vars: ../vars/macos.yml
+      ansible.builtin.include_vars: ../vars/macos.yml
       tags: always
 
     - name: Load common variables
-      ansible.builtin.import_vars: ../vars/common.yml
+      ansible.builtin.include_vars: ../vars/common.yml
       tags: always
 
     - name: Run Xcode Command Line Tools role

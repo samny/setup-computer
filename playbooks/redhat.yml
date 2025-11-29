@@ -2,11 +2,11 @@
 - name: Fedora Setup
   block:
     - name: Load Fedora variables
-      ansible.builtin.import_vars: ../vars/fedora.yml
+      ansible.builtin.include_vars: ../vars/fedora.yml
       tags: always
 
     - name: Load common variables
-      ansible.builtin.import_vars: ../vars/common.yml
+      ansible.builtin.include_vars: ../vars/common.yml
       tags: always
 
     - name: Run DNF packages role
