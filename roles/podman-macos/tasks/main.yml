@@ -6,13 +6,21 @@
   failed_when: false
 
 - name: Initialize Podman machine with native ARM64 (no Rosetta)
-  ansible.builtin.command: podman machine init --cpus 4 --memory 4096 --disk-size 50 --rootful=false
+  ansible.builtin.command: >
+    podman machine init
+    --cpus 4
+    --memory 4096
+    --disk-size 50
+    --rootful=false
+    --user-mode-networking
   when: podman_machine_list.stdout == "[]" or podman_machine_list.rc != 0
   changed_when: true
+  environment:
+    CONTAINERS_MACHINE_PROVIDER: applehv
 
 - name: Display Podman machine info
   ansible.builtin.debug:
-    msg: "Podman machine initialized with native Apple Silicon support (no Rosetta required)"
+    msg: "Podman machine initialized with native Apple Silicon support using Apple Hypervisor (no Rosetta)"
   when: podman_machine_list.stdout == "[]" or podman_machine_list.rc != 0
 
 - name: Start Podman machine
