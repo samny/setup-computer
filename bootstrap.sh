@@ -63,23 +63,23 @@ install_homebrew() {
 install_ansible_macos() {
     if command -v ansible &>/dev/null; then
         log_info "Ansible already installed"
-    else
-        log_info "Installing Ansible via pip3..."
-        if ! command -v pip3 &>/dev/null; then
-            log_info "Installing Python3..."
-            brew install python3
-        fi
-        pip3 install --user ansible
+        return
     fi
     
-    # Add Python user bin to PATH (detect Python version dynamically)
-    PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-    PYTHON_USER_BIN="$HOME/Library/Python/${PYTHON_VERSION}/bin"
-    
-    if [[ -d "$PYTHON_USER_BIN" ]]; then
-        export PATH="$PYTHON_USER_BIN:$PATH"
-        log_info "Added $PYTHON_USER_BIN to PATH"
+    # Install pipx if not available
+    if ! command -v pipx &>/dev/null; then
+        log_info "Installing pipx..."
+        brew install pipx
+        pipx ensurepath
     fi
+    
+    # Install Ansible via pipx
+    log_info "Installing Ansible via pipx..."
+    pipx install --include-deps ansible
+    
+    # Add pipx bin to PATH
+    export PATH="$HOME/.local/bin:$PATH"
+    log_info "Added $HOME/.local/bin to PATH"
 }
 
 # Install Ansible on Fedora

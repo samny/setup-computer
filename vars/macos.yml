@@ -20,7 +20,6 @@ homebrew_casks:
   - devpod
   - github
   - iterm2
-  - microsoft-teams
   - obsidian
   - protonvpn
   - signal
